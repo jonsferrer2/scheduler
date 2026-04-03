@@ -25,7 +25,7 @@ public class BranchService(AppDbContext db, ILogger<BranchService> logger)
         }
         catch (Exception ex)
         {
-            Console.WriteLine(ex.Message);
+            logger.LogError(ex.Message);
             result.Message = "Something went wrong!";
             return result;
         }
@@ -52,7 +52,7 @@ public class BranchService(AppDbContext db, ILogger<BranchService> logger)
         }
         catch (Exception ex)
         {
-            Console.WriteLine(ex.Message);
+            logger.LogError(ex.Message);
             result.Message = "Something went wrong!";
             return result;
         }
@@ -91,7 +91,7 @@ public class BranchService(AppDbContext db, ILogger<BranchService> logger)
         }
         catch (Exception ex)
         {
-            Console.WriteLine(ex.Message);
+            logger.LogError(ex.Message);
             result.Message = "Something went wrong!";
             return result;
         }

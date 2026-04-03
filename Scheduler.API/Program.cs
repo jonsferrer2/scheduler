@@ -21,6 +21,7 @@ try
         options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
 
     builder.Services.AddScoped<BranchService>();
+    builder.Services.AddScoped<AppointmentTypeService>();
 
     var app = builder.Build();
 
