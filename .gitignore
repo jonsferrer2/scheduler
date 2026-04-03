@@ -1,0 +1,162 @@
+## .gitignore for C# .NET Web API
+
+# ========================
+# Build outputs
+# ========================
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+[Ww][Ii][Nn]32/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+bld/
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Ll]ogs/
+
+# ========================
+# .NET / MSBuild
+# ========================
+project.lock.json
+project.fragment.lock.json
+artifacts/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.userprefs
+*.dbmdl
+*.dbproj.schemaview
+*.jfm
+*.pfx
+*.publishsettings
+orleans.codegen.cs
+
+# ========================
+# NuGet
+# ========================
+*.nupkg
+*.snupkg
+**/[Pp]ackages/*
+!**/[Pp]ackages/build/
+*.nuget.props
+*.nuget.targets
+project.lock.json
+packages/
+nuget.config
+
+# ========================
+# ASP.NET / Web API
+# ========================
+**/launchSettings.json
+**/appsettings.*.json
+!**/appsettings.json
+!**/appsettings.Example.json
+wwwroot/lib/
+
+# ========================
+# Secrets & Configuration
+# ========================
+*.env
+*.env.*
+!*.env.example
+secrets.json
+appsettings.local.json
+appsettings.Local.json
+appsettings.Development.json
+
+# ========================
+# Visual Studio
+# ========================
+.vs/
+*.rsuser
+*.suo
+*.vsp
+*.vspx
+*.sap
+*.vcxproj.filters
+*.aps
+*.ncb
+*.opendb
+*.opensdf
+*.sdf
+*.cachefile
+*.VC.db
+*.VC.opendb
+_ReSharper*/
+*.[Rr]e[Ss]harper
+*.DotSettings.user
+*.dotCover
+.idea/
+
+# ========================
+# JetBrains Rider
+# ========================
+.idea/
+*.sln.iml
+
+# ========================
+# Visual Studio Code
+# ========================
+.vscode/
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# ========================
+# Test results
+# ========================
+[Tt]est[Rr]esult*/
+[Bb]uild[Ll]og.*
+*.trx
+*.coverage
+*.coveragexml
+TestResults/
+coverage*/
+
+# ========================
+# Publish / Deploy
+# ========================
+**/publish/
+PublishProfiles/
+*.pubxml
+*.pubxml.user
+*.publishproj
+
+# ========================
+# Entity Framework
+# ========================
+*.mdf
+*.ldf
+*.ndf
+migrations/*.Designer.cs
+
+# ========================
+# Docker
+# ========================
+# (Keep Dockerfile and docker-compose.yml tracked)
+.dockerignore
+
+# ========================
+# OS generated
+# ========================
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+
+# ========================
+# Miscellaneous
+# ========================
+*.bak
+*.tmp
+*.temp
+*.swp
+*~
