@@ -58,29 +58,27 @@ public class AppointmentTypeService(AppDbContext db, ILogger<AppointmentTypeServ
 
     public async Task<Result<CreateAppointmentTypeResponse>> Create(CreateAppointmentTypeRequest appointmentType)
     {
-        bool exists = await db.AppointmentTypes.AnyAsync(i => i.Name.Trim().ToLower() == appointmentType.Name.Trim().ToLower()
-            && i.TransactionType == appointmentType.TransactionType
-        );
-
         var result = new Result<CreateAppointmentTypeResponse>();
-
-        if (exists)
-        {
-            result.Message = "Appointment type name already exists!";
-            return result;
-        }
-
-        var newAppointmentType = new AppointmentType
-        {
-            Name = appointmentType.Name,
-            Duration = appointmentType.Duration,
-            TransactionType = appointmentType.TransactionType,
-            DateTimeCreated = DateTime.UtcNow,
-            DateTimeUpdated = DateTime.UtcNow,
-        };
-
         try
         {
+            bool exists = await db.AppointmentTypes.AnyAsync(i => i.Name.Trim().ToLower() == appointmentType.Name.Trim().ToLower()
+                && i.TransactionType == appointmentType.TransactionType
+            );
+
+            if (exists)
+            {
+                result.Message = "Appointment type name already exists!";
+                return result;
+            }
+
+            var newAppointmentType = new AppointmentType
+            {
+                Name = appointmentType.Name,
+                Duration = appointmentType.Duration,
+                TransactionType = appointmentType.TransactionType,
+                DateTimeCreated = DateTime.UtcNow,
+                DateTimeUpdated = DateTime.UtcNow,
+            };
             await db.AppointmentTypes.AddAsync(newAppointmentType);
             await db.SaveChangesAsync();
 
@@ -96,6 +94,57 @@ public class AppointmentTypeService(AppDbContext db, ILogger<AppointmentTypeServ
             result.Message = "Something went wrong!";
             return result;
         }
+    }
 
+    public async Task<Result<CreateAppointmentTypeResponse>> Update(Guid Id, UpdateAppointmentTypeRequest fields)
+    {
+        var result = new Result<CreateAppointmentTypeResponse>();
+        try
+        {
+            var record = await db.AppointmentTypes.FindAsync(Id);
+            if (record == null)
+            {
+                result.Message = "Appointment type not found!";
+                return result;
+            }
+
+            record.Name = fields.Name is null ? record.Name : fields.Name;
+            record.Duration = fields.Duration ?? record.Duration;
+            record.DateTimeUpdated = DateTime.UtcNow;
+
+            await db.SaveChangesAsync();
+            result.IsSucces = true;
+            result.Message = "Appointment type successfully updated!";
+            result.Data = new CreateAppointmentTypeResponse(record.Id, record.Name, record.Duration, record.TransactionType);
+
+            return result;
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex.Message);
+            result.Message = "Something went wrong";
+            return result;
+        }
+    }
+
+    public async Task<Result<object>> Delete(Guid Id)
+    {
+        var result = new Result<object>();
+        try
+        {
+            var res = db.AppointmentTypes
+                .Where(i => i.Id == Id)
+                .ExecuteDeleteAsync();
+
+            result.IsSucces = true;
+            result.Message = "Appointment type successfully deleted!";
+            return result;
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex.Message);
+            result.Message = "Something went wrong";
+            return result;
+        }
     }
 }

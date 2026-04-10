@@ -16,4 +16,11 @@ public record CreateAppointmentTypeRequest(
     [Range(1,2)]
     int TransactionType
 );
+public record UpdateAppointmentTypeRequest(
+    [StringLength(100, MinimumLength = 3)]
+    string? Name,
+
+    [Range(5, 100)]
+    int? Duration
+);
 public record CreateAppointmentTypeResponse(Guid Id, string Name, int Duration, int TransactionType);

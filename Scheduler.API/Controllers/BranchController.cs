@@ -23,9 +23,9 @@ public class BranchController(BranchService service) : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreateBranch(CreateBranchRequest branch)
+    public async Task<IActionResult> CreateBranch(CreateBranchRequest data)
     {
-        var res = await service.Create(branch);
+        var res = await service.Create(data);
         return Ok(res);
     }
 }
