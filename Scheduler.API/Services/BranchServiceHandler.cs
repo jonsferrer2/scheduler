@@ -6,7 +6,7 @@ using Scheduler.API.Models;
 
 namespace Scheduler.API.Services;
 
-public class BranchService(AppDbContext db, ILogger<BranchService> logger)
+public class BranchServiceHandler(AppDbContext db, ILogger<BranchServiceHandler> logger)
 {
 
     public async Task<Result<List<BranchDto>>> GetAllAsync()

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Scheduler.API.Data;
 
@@ -11,9 +12,11 @@ using Scheduler.API.Data;
 namespace Scheduler.API.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260417080828_UpdateRole")]
+    partial class UpdateRole
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -39,7 +42,7 @@ namespace Scheduler.API.Migrations
                         .HasColumnType("datetime(6)")
                         .HasColumnName("datetime_created");
 
-                    b.Property<DateTime?>("DateTimeUpdated")
+                    b.Property<DateTime>("DateTimeUpdated")
                         .HasColumnType("datetime(6)")
                         .HasColumnName("datetime_updated");
 
@@ -98,7 +101,7 @@ namespace Scheduler.API.Migrations
                     b.Property<DateTime>("DateTimeCreated")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<DateTime?>("DateTimeUpdated")
+                    b.Property<DateTime>("DateTimeUpdated")
                         .HasColumnType("datetime(6)");
 
                     b.Property<int>("Duration")
@@ -141,7 +144,7 @@ namespace Scheduler.API.Migrations
                         .HasColumnType("datetime(6)")
                         .HasColumnName("datetime_created");
 
-                    b.Property<DateTime?>("DateTimeUpdated")
+                    b.Property<DateTime>("DateTimeUpdated")
                         .HasColumnType("datetime(6)")
                         .HasColumnName("datetime_updated");
 
@@ -208,7 +211,7 @@ namespace Scheduler.API.Migrations
                         .HasColumnType("datetime(6)")
                         .HasColumnName("datetime_created");
 
-                    b.Property<DateTime?>("DateTimeUpdated")
+                    b.Property<DateTime>("DateTimeUpdated")
                         .HasColumnType("datetime(6)")
                         .HasColumnName("datetime_updated");
 
@@ -246,7 +249,7 @@ namespace Scheduler.API.Migrations
                         .HasColumnType("datetime(6)")
                         .HasColumnName("datetime_created");
 
-                    b.Property<DateTime?>("DateTimeUpdated")
+                    b.Property<DateTime>("DateTimeUpdated")
                         .HasColumnType("datetime(6)")
                         .HasColumnName("datetime_updated");
 

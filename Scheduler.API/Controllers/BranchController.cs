@@ -6,7 +6,7 @@ namespace Scheduler.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class BranchController(BranchService service) : ControllerBase
+public class BranchController(BranchServiceHandler service) : ControllerBase
 {
     [HttpGet]
     public async Task<IActionResult> GetAllAsync()

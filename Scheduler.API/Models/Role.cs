@@ -6,5 +6,5 @@ public class Role
     public string Title { get; set; } = "";
 
     public DateTime DateTimeCreated { get; set; }
-    public DateTime DateTimeUpdated { get; set; }
+    public DateTime? DateTimeUpdated { get; set; }
 }

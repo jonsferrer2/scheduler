@@ -6,7 +6,7 @@ namespace Scheduler.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class AppointmentTypeController(AppointmentTypeService service) : ControllerBase
+public class AppointmentTypeController(AppointmentTypeServiceHandler service) : ControllerBase
 {
 
     [HttpGet]

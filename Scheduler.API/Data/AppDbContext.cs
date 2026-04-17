@@ -5,11 +5,12 @@ namespace Scheduler.API.Data;
 
 public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(options)
 {
-    public DbSet<AppointmentType> AppointmentTypes { get; set; }
     public DbSet<Branch> Branches { get; set; }
     public DbSet<Role> Roles { get; set; }
     public DbSet<AdminUser> AdminUsers { get; set; }
     public DbSet<ServiceType> ServiceTypes { get; set; }
+    public DbSet<Service> Services { get; set; }
+    public DbSet<BranchService> BranchServices { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -41,6 +42,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
 
             entity.Property(a => a.DateTimeUpdated)
                 .HasColumnName("datetime_updated")
+                .IsRequired(false)
                 .ValueGeneratedNever();
         });
 
@@ -65,6 +67,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
 
             entity.Property(a => a.DateTimeUpdated)
                 .HasColumnName("datetime_updated")
+                .IsRequired(false)
                 .ValueGeneratedNever();
         });
 
@@ -82,9 +85,18 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
                 .HasColumnName("role_id")
                 .IsRequired();
 
+            entity.Property(a => a.BranchId)
+                .HasColumnName("branch_id")
+                .IsRequired();
+
             entity.Property(a => a.Username)
                 .HasColumnName("username")
                 .HasMaxLength(100)
+                .IsRequired();
+
+            entity.Property(a => a.PasswordHash)
+                .HasColumnName("password_hash")
+                .HasMaxLength(255)
                 .IsRequired();
 
             entity.Property(a => a.FullName)
@@ -102,6 +114,15 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
                 .HasMaxLength(30)
                 .IsRequired();
 
+            entity.Property(a => a.DateTimeCreated)
+                .HasColumnName("datetime_created")
+                .ValueGeneratedNever();
+
+            entity.Property(a => a.DateTimeUpdated)
+                .HasColumnName("datetime_updated")
+                .IsRequired(false)
+                .ValueGeneratedNever();
+
             entity.HasIndex(a => a.Username).IsUnique();
             entity.HasIndex(a => a.Email).IsUnique();
             entity.HasIndex(a => a.MobileNum).IsUnique();
@@ -111,13 +132,17 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
                 .HasForeignKey(a => a.RoleId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            entity.HasMany(a => a.Branches)
-                .WithMany(b => b.AdminUsers)
-                .UsingEntity(j => j.ToTable("admin_user_branch"));
+            entity.HasOne(a => a.Branch)
+                .WithMany()
+                .HasForeignKey(a => a.BranchId)
+                .OnDelete(DeleteBehavior.Restrict);
+
         });
 
         modelBuilder.Entity<ServiceType>(entity =>
         {
+            entity.ToTable("service_types");
+
             entity.HasKey(a => a.Id);
 
             entity.Property(a => a.Id)
@@ -135,6 +160,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
 
             entity.Property(a => a.DateTimeUpdated)
                 .HasColumnName("datetime_updated")
+                .IsRequired(false)
                 .ValueGeneratedNever();
         });
 
@@ -155,10 +181,6 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
                 .HasColumnName("duration")
                 .IsRequired();
 
-            entity.Property(a => a.BranchId)
-                .HasColumnName("branch_id")
-                .IsRequired();
-
             entity.Property(a => a.ServiceTypeId)
                 .HasColumnName("service_type_id")
                 .IsRequired();
@@ -169,10 +191,33 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
 
             entity.Property(a => a.DateTimeUpdated)
                 .HasColumnName("datetime_updated")
+                .IsRequired(false)
                 .ValueGeneratedNever();
 
+        });
+
+        modelBuilder.Entity<BranchService>(entity =>
+        {
+            entity.ToTable("branch_services");
+
+            entity.HasKey(a => new { a.BranchId, a.ServiceId });
+
+            entity.Property(a => a.BranchId)
+                .HasColumnName("branch_id");
+
+            entity.Property(a => a.ServiceId)
+                .HasColumnName("service_id");
+
             entity.HasOne(a => a.Branch)
-                .WithMany();
+                .WithMany(s => s.BranchServices)
+                .HasForeignKey(a => a.BranchId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            entity.HasOne(a => a.Service)
+                .WithMany(s => s.BranchServices)
+                .HasForeignKey(a => a.ServiceId)
+                .OnDelete(DeleteBehavior.Cascade);
+
         });
     }
 

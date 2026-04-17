@@ -6,7 +6,7 @@ using Scheduler.API.Models;
 
 namespace Scheduler.API.Services;
 
-public class AppointmentTypeService(AppDbContext db, ILogger<AppointmentTypeService> logger)
+public class AppointmentTypeServiceHandler(AppDbContext db, ILogger<AppointmentTypeServiceHandler> logger)
 {
     public async Task<Result<List<AppointmentTypeDto>>> GetAllAsync()
     {
