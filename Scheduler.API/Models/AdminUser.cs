@@ -7,8 +7,7 @@ public class AdminUser
     public int RoleId { get; set; }
     public required Role Role { get; set; }
 
-    public int BranchId { get; set; }
-    public required Branch Branch { get; set; }
+    public ICollection<AdminUserBranch> AdminUserBranches { get; set; } = [];
 
     public string Username { get; set; } = "";
     public string PasswordHash { get; set; } = "";

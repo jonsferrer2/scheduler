@@ -8,9 +8,10 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     public DbSet<Branch> Branches { get; set; }
     public DbSet<Role> Roles { get; set; }
     public DbSet<AdminUser> AdminUsers { get; set; }
-    public DbSet<ServiceType> ServiceTypes { get; set; }
-    public DbSet<Service> Services { get; set; }
-    public DbSet<BranchService> BranchServices { get; set; }
+    public DbSet<AdminUserBranch> AdminUserBranches { get; set; }
+    // public DbSet<ServiceType> ServiceTypes { get; set; }
+    // public DbSet<Service> Services { get; set; }
+    // public DbSet<BranchService> BranchServices { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -85,10 +86,6 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
                 .HasColumnName("role_id")
                 .IsRequired();
 
-            entity.Property(a => a.BranchId)
-                .HasColumnName("branch_id")
-                .IsRequired();
-
             entity.Property(a => a.Username)
                 .HasColumnName("username")
                 .HasMaxLength(100)
@@ -132,93 +129,107 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
                 .HasForeignKey(a => a.RoleId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            entity.HasOne(a => a.Branch)
-                .WithMany()
-                .HasForeignKey(a => a.BranchId)
-                .OnDelete(DeleteBehavior.Restrict);
-
         });
 
-        modelBuilder.Entity<ServiceType>(entity =>
+        modelBuilder.Entity<AdminUserBranch>(entity =>
         {
-            entity.ToTable("service_types");
+            entity.ToTable("admin_user_branches");
 
-            entity.HasKey(a => a.Id);
+            entity.HasKey(a => new { a.AdminUserId, a.BranchId });
 
-            entity.Property(a => a.Id)
-                .HasColumnName("id")
-                .ValueGeneratedOnAdd();
-
-            entity.Property(a => a.Name)
-                .HasColumnName("name")
-                .HasMaxLength(255)
-                .IsRequired();
-
-            entity.Property(a => a.DateTimeCreated)
-                .HasColumnName("datetime_created")
-                .ValueGeneratedNever();
-
-            entity.Property(a => a.DateTimeUpdated)
-                .HasColumnName("datetime_updated")
-                .IsRequired(false)
-                .ValueGeneratedNever();
-        });
-
-        modelBuilder.Entity<Service>(entity =>
-        {
-            entity.HasKey(a => a.Id);
-
-            entity.Property(a => a.Id)
-                .HasColumnName("id")
-                .ValueGeneratedOnAdd();
-
-            entity.Property(a => a.Name)
-                .HasColumnName("name")
-                .HasMaxLength(255)
-                .IsRequired();
-
-            entity.Property(a => a.Duration)
-                .HasColumnName("duration")
-                .IsRequired();
-
-            entity.Property(a => a.ServiceTypeId)
-                .HasColumnName("service_type_id")
-                .IsRequired();
-
-            entity.Property(a => a.DateTimeCreated)
-                .HasColumnName("datetime_created")
-                .ValueGeneratedNever();
-
-            entity.Property(a => a.DateTimeUpdated)
-                .HasColumnName("datetime_updated")
-                .IsRequired(false)
-                .ValueGeneratedNever();
-
-        });
-
-        modelBuilder.Entity<BranchService>(entity =>
-        {
-            entity.ToTable("branch_services");
-
-            entity.HasKey(a => new { a.BranchId, a.ServiceId });
+            entity.Property(a => a.AdminUserId)
+                .HasColumnName("admin_user_id");
 
             entity.Property(a => a.BranchId)
                 .HasColumnName("branch_id");
 
-            entity.Property(a => a.ServiceId)
-                .HasColumnName("service_id");
-
-            entity.HasOne(a => a.Branch)
-                .WithMany(s => s.BranchServices)
-                .HasForeignKey(a => a.BranchId)
+            entity.HasOne(a => a.AdminUser)
+                .WithMany(b => b.AdminUserBranches)
+                .HasForeignKey(a => a.AdminUserId)
                 .OnDelete(DeleteBehavior.Cascade);
-
-            entity.HasOne(a => a.Service)
-                .WithMany(s => s.BranchServices)
-                .HasForeignKey(a => a.ServiceId)
-                .OnDelete(DeleteBehavior.Cascade);
-
         });
+
+        // modelBuilder.Entity<ServiceType>(entity =>
+        // {
+        //     entity.ToTable("service_types");
+
+        //     entity.HasKey(a => a.Id);
+
+        //     entity.Property(a => a.Id)
+        //         .HasColumnName("id")
+        //         .ValueGeneratedOnAdd();
+
+        //     entity.Property(a => a.Name)
+        //         .HasColumnName("name")
+        //         .HasMaxLength(255)
+        //         .IsRequired();
+
+        //     entity.Property(a => a.DateTimeCreated)
+        //         .HasColumnName("datetime_created")
+        //         .ValueGeneratedNever();
+
+        //     entity.Property(a => a.DateTimeUpdated)
+        //         .HasColumnName("datetime_updated")
+        //         .IsRequired(false)
+        //         .ValueGeneratedNever();
+        // });
+
+        // modelBuilder.Entity<Service>(entity =>
+        // {
+        //     entity.HasKey(a => a.Id);
+
+        //     entity.Property(a => a.Id)
+        //         .HasColumnName("id")
+        //         .ValueGeneratedOnAdd();
+
+        //     entity.Property(a => a.Name)
+        //         .HasColumnName("name")
+        //         .HasMaxLength(255)
+        //         .IsRequired();
+
+        //     entity.Property(a => a.Duration)
+        //         .HasColumnName("duration")
+        //         .IsRequired();
+
+        //     entity.Property(a => a.ServiceTypeId)
+        //         .HasColumnName("service_type_id")
+        //         .IsRequired();
+
+        //     entity.Property(a => a.DateTimeCreated)
+        //         .HasColumnName("datetime_created")
+        //         .ValueGeneratedNever();
+
+        //     entity.Property(a => a.DateTimeUpdated)
+        //         .HasColumnName("datetime_updated")
+        //         .IsRequired(false)
+        //         .ValueGeneratedNever();
+
+        // });
+
+        // modelBuilder.Entity<BranchService>(entity =>
+        // {
+        //     entity.ToTable("branch_services");
+
+        //     entity.HasKey(a => new { a.BranchId, a.ServiceId });
+
+        //     entity.Property(a => a.BranchId)
+        //         .HasColumnName("branch_id");
+
+        //     entity.Property(a => a.ServiceId)
+        //         .HasColumnName("service_id");
+
+        //     entity.HasOne(a => a.Branch)
+        //         .WithMany(s => s.BranchServices)
+        //         .HasForeignKey(a => a.BranchId)
+        //         .OnDelete(DeleteBehavior.Cascade);
+
+        //     entity.HasOne(a => a.Service)
+        //         .WithMany(s => s.BranchServices)
+        //         .HasForeignKey(a => a.ServiceId)
+        //         .OnDelete(DeleteBehavior.Cascade);
+
+        // });
+
     }
 
 }

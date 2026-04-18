@@ -12,8 +12,8 @@ using Scheduler.API.Data;
 namespace Scheduler.API.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260417081216_UpdateDatetimeUpdated")]
-    partial class UpdateDatetimeUpdated
+    [Migration("20260418153205_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -33,10 +33,6 @@ namespace Scheduler.API.Migrations
                         .HasColumnName("id");
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("BranchId")
-                        .HasColumnType("int")
-                        .HasColumnName("branch_id");
 
                     b.Property<DateTime>("DateTimeCreated")
                         .HasColumnType("datetime(6)")
@@ -64,6 +60,12 @@ namespace Scheduler.API.Migrations
                         .HasColumnType("varchar(30)")
                         .HasColumnName("mobile_num");
 
+                    b.Property<string>("PasswordHash")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("varchar(255)")
+                        .HasColumnName("password_hash");
+
                     b.Property<int>("RoleId")
                         .HasColumnType("int")
                         .HasColumnName("role_id");
@@ -75,8 +77,6 @@ namespace Scheduler.API.Migrations
                         .HasColumnName("username");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("BranchId");
 
                     b.HasIndex("Email")
                         .IsUnique();
@@ -92,31 +92,21 @@ namespace Scheduler.API.Migrations
                     b.ToTable("admin_users", (string)null);
                 });
 
-            modelBuilder.Entity("Scheduler.API.Models.AppointmentType", b =>
+            modelBuilder.Entity("Scheduler.API.Models.AdminUserBranch", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
+                    b.Property<int>("AdminUserId")
+                        .HasColumnType("int")
+                        .HasColumnName("admin_user_id");
 
-                    b.Property<DateTime>("DateTimeCreated")
-                        .HasColumnType("datetime(6)");
+                    b.Property<int>("BranchId")
+                        .HasColumnType("int")
+                        .HasColumnName("branch_id");
 
-                    b.Property<DateTime?>("DateTimeUpdated")
-                        .HasColumnType("datetime(6)");
+                    b.HasKey("AdminUserId", "BranchId");
 
-                    b.Property<int>("Duration")
-                        .HasColumnType("int");
+                    b.HasIndex("BranchId");
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<int>("TransactionType")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("AppointmentTypes");
+                    b.ToTable("admin_user_branches", (string)null);
                 });
 
             modelBuilder.Entity("Scheduler.API.Models.Branch", b =>
@@ -153,23 +143,6 @@ namespace Scheduler.API.Migrations
                     b.ToTable("branches", (string)null);
                 });
 
-            modelBuilder.Entity("Scheduler.API.Models.BranchService", b =>
-                {
-                    b.Property<int>("BranchId")
-                        .HasColumnType("int")
-                        .HasColumnName("branch_id");
-
-                    b.Property<int>("ServiceId")
-                        .HasColumnType("int")
-                        .HasColumnName("service_id");
-
-                    b.HasKey("BranchId", "ServiceId");
-
-                    b.HasIndex("ServiceId");
-
-                    b.ToTable("branch_services", (string)null);
-                });
-
             modelBuilder.Entity("Scheduler.API.Models.Role", b =>
                 {
                     b.Property<int>("Id")
@@ -198,129 +171,39 @@ namespace Scheduler.API.Migrations
                     b.ToTable("roles", (string)null);
                 });
 
-            modelBuilder.Entity("Scheduler.API.Models.Service", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("id");
-
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("DateTimeCreated")
-                        .HasColumnType("datetime(6)")
-                        .HasColumnName("datetime_created");
-
-                    b.Property<DateTime?>("DateTimeUpdated")
-                        .HasColumnType("datetime(6)")
-                        .HasColumnName("datetime_updated");
-
-                    b.Property<int>("Duration")
-                        .HasColumnType("int")
-                        .HasColumnName("duration");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("varchar(255)")
-                        .HasColumnName("name");
-
-                    b.Property<int>("ServiceTypeId")
-                        .HasColumnType("int")
-                        .HasColumnName("service_type_id");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ServiceTypeId");
-
-                    b.ToTable("Services");
-                });
-
-            modelBuilder.Entity("Scheduler.API.Models.ServiceType", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("id");
-
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("DateTimeCreated")
-                        .HasColumnType("datetime(6)")
-                        .HasColumnName("datetime_created");
-
-                    b.Property<DateTime?>("DateTimeUpdated")
-                        .HasColumnType("datetime(6)")
-                        .HasColumnName("datetime_updated");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("varchar(255)")
-                        .HasColumnName("name");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("ServiceTypes");
-                });
-
             modelBuilder.Entity("Scheduler.API.Models.AdminUser", b =>
                 {
-                    b.HasOne("Scheduler.API.Models.Branch", "Branch")
-                        .WithMany()
-                        .HasForeignKey("BranchId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
                     b.HasOne("Scheduler.API.Models.Role", "Role")
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.Navigation("Branch");
-
                     b.Navigation("Role");
                 });
 
-            modelBuilder.Entity("Scheduler.API.Models.BranchService", b =>
+            modelBuilder.Entity("Scheduler.API.Models.AdminUserBranch", b =>
                 {
+                    b.HasOne("Scheduler.API.Models.AdminUser", "AdminUser")
+                        .WithMany("AdminUserBranches")
+                        .HasForeignKey("AdminUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Scheduler.API.Models.Branch", "Branch")
-                        .WithMany("BranchServices")
+                        .WithMany()
                         .HasForeignKey("BranchId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Scheduler.API.Models.Service", "Service")
-                        .WithMany("BranchServices")
-                        .HasForeignKey("ServiceId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Navigation("AdminUser");
 
                     b.Navigation("Branch");
-
-                    b.Navigation("Service");
                 });
 
-            modelBuilder.Entity("Scheduler.API.Models.Service", b =>
+            modelBuilder.Entity("Scheduler.API.Models.AdminUser", b =>
                 {
-                    b.HasOne("Scheduler.API.Models.ServiceType", "ServiceType")
-                        .WithMany()
-                        .HasForeignKey("ServiceTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ServiceType");
-                });
-
-            modelBuilder.Entity("Scheduler.API.Models.Branch", b =>
-                {
-                    b.Navigation("BranchServices");
-                });
-
-            modelBuilder.Entity("Scheduler.API.Models.Service", b =>
-                {
-                    b.Navigation("BranchServices");
+                    b.Navigation("AdminUserBranches");
                 });
 #pragma warning restore 612, 618
         }

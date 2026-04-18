@@ -74,8 +74,7 @@ public class BranchServiceHandler(AppDbContext db, ILogger<BranchServiceHandler>
         {
             BranchName = branch.BranchName,
             Address = branch.Address,
-            DateTimeCreated = DateTime.UtcNow,
-            DateTimeUpdated = DateTime.UtcNow,
+            DateTimeCreated = DateTime.UtcNow
         };
 
         try

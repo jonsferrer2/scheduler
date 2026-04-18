@@ -3,7 +3,6 @@ using Scheduler.API.Data;
 using Scheduler.API.Models;
 using Scheduler.API.Services;
 using Serilog;
-using Serilog.Formatting.Compact;
 
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
@@ -22,7 +21,8 @@ try
         options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
 
     builder.Services.AddScoped<BranchServiceHandler>();
-    builder.Services.AddScoped<AppointmentTypeServiceHandler>();
+    builder.Services.AddScoped<AuthServiceHandler>();
+    // builder.Services.AddScoped<AppointmentTypeServiceHandler>();
 
     var app = builder.Build();
 
@@ -48,6 +48,12 @@ try
                 new Role
                 {
                     Id = 2,
+                    Title = "Manager",
+                    DateTimeCreated = DateTime.Now,
+                },
+                new Role
+                {
+                    Id = 3,
                     Title = "Agent",
                     DateTimeCreated = DateTime.Now,
                 }
