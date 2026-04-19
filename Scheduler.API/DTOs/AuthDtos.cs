@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using Scheduler.API.DTOs.Validations;
 
 namespace Scheduler.API.DTOs;
 
@@ -31,11 +32,13 @@ public record RegisterRequest(
     string FullName,
 
     [Required]
-    [StringLength(255, MinimumLength = 3)]
+    [StringLength(255)]
+    [EmailAddress]
     string Email,
 
     [Required]
     [StringLength(255, MinimumLength = 3)]
+    [StartsWith(["09", "63", "9"])]
     string MobileNum,
 
     [Required]

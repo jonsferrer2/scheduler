@@ -8,7 +8,6 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     public DbSet<Branch> Branches { get; set; }
     public DbSet<Role> Roles { get; set; }
     public DbSet<AdminUser> AdminUsers { get; set; }
-    public DbSet<AdminUserBranch> AdminUserBranches { get; set; }
     // public DbSet<ServiceType> ServiceTypes { get; set; }
     // public DbSet<Service> Services { get; set; }
     // public DbSet<BranchService> BranchServices { get; set; }
@@ -129,24 +128,6 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
                 .HasForeignKey(a => a.RoleId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-        });
-
-        modelBuilder.Entity<AdminUserBranch>(entity =>
-        {
-            entity.ToTable("admin_user_branches");
-
-            entity.HasKey(a => new { a.AdminUserId, a.BranchId });
-
-            entity.Property(a => a.AdminUserId)
-                .HasColumnName("admin_user_id");
-
-            entity.Property(a => a.BranchId)
-                .HasColumnName("branch_id");
-
-            entity.HasOne(a => a.AdminUser)
-                .WithMany(b => b.AdminUserBranches)
-                .HasForeignKey(a => a.AdminUserId)
-                .OnDelete(DeleteBehavior.Cascade);
         });
 
         // modelBuilder.Entity<ServiceType>(entity =>

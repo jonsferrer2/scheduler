@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using Scheduler.API.Common;
 using Scheduler.API.Data;
 using Scheduler.API.DTOs;
@@ -12,7 +13,11 @@ public class AuthServiceHandler(AppDbContext db, ILogger<AuthServiceHandler> log
         var result = new Result<object>();
         try
         {
-            logger.LogInformation("@{data}", registerData);
+
+            var exists = await db.AdminUsers.AnyAsync(u =>
+                u.Email == registerData.Email || u.MobileNum == registerData.MobileNum
+            );
+
             return result;
         }
         catch (Exception ex)
