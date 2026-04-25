@@ -58,8 +58,6 @@ namespace Scheduler.API.Migrations
                     id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     role_id = table.Column<int>(type: "int", nullable: false),
-                    username = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
                     password_hash = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     fullname = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: false)
@@ -83,36 +81,6 @@ namespace Scheduler.API.Migrations
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
-            migrationBuilder.CreateTable(
-                name: "admin_user_branches",
-                columns: table => new
-                {
-                    admin_user_id = table.Column<int>(type: "int", nullable: false),
-                    branch_id = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_admin_user_branches", x => new { x.admin_user_id, x.branch_id });
-                    table.ForeignKey(
-                        name: "FK_admin_user_branches_admin_users_admin_user_id",
-                        column: x => x.admin_user_id,
-                        principalTable: "admin_users",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_admin_user_branches_branches_branch_id",
-                        column: x => x.branch_id,
-                        principalTable: "branches",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_admin_user_branches_branch_id",
-                table: "admin_user_branches",
-                column: "branch_id");
-
             migrationBuilder.CreateIndex(
                 name: "IX_admin_users_email",
                 table: "admin_users",
@@ -129,20 +97,11 @@ namespace Scheduler.API.Migrations
                 name: "IX_admin_users_role_id",
                 table: "admin_users",
                 column: "role_id");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_admin_users_username",
-                table: "admin_users",
-                column: "username",
-                unique: true);
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(
-                name: "admin_user_branches");
-
             migrationBuilder.DropTable(
                 name: "admin_users");
 

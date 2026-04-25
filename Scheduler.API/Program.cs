@@ -3,10 +3,16 @@ using Scheduler.API.Data;
 using Scheduler.API.Models;
 using Scheduler.API.Services;
 using Serilog;
+using Serilog.Events;
 
 Log.Logger = new LoggerConfiguration()
+    .MinimumLevel.Debug()
+    .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
+    .MinimumLevel.Override("System", LogEventLevel.Warning)
+    .WriteTo.File("Logs/TraceLog-.txt", rollingInterval: RollingInterval.Day)
     .WriteTo.Console()
     .CreateLogger();
+
 
 var builder = WebApplication.CreateBuilder(args);
 

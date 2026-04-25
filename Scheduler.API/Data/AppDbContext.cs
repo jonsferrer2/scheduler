@@ -85,11 +85,6 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
                 .HasColumnName("role_id")
                 .IsRequired();
 
-            entity.Property(a => a.Username)
-                .HasColumnName("username")
-                .HasMaxLength(100)
-                .IsRequired();
-
             entity.Property(a => a.PasswordHash)
                 .HasColumnName("password_hash")
                 .HasMaxLength(255)
@@ -108,7 +103,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
             entity.Property(a => a.MobileNum)
                 .HasColumnName("mobile_num")
                 .HasMaxLength(30)
-                .IsRequired();
+                .IsRequired(false);
 
             entity.Property(a => a.DateTimeCreated)
                 .HasColumnName("datetime_created")
@@ -119,7 +114,6 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
                 .IsRequired(false)
                 .ValueGeneratedNever();
 
-            entity.HasIndex(a => a.Username).IsUnique();
             entity.HasIndex(a => a.Email).IsUnique();
             entity.HasIndex(a => a.MobileNum).IsUnique();
 

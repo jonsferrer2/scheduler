@@ -20,8 +20,9 @@ public record LoginResponse(
 public record RegisterRequest(
 
     [Required]
-    [StringLength(100, MinimumLength = 3)]
-    string Username,
+    [StringLength(255)]
+    [EmailAddress]
+    string Email,
 
     [Required]
     [StringLength(255, MinimumLength = 3)]
@@ -30,16 +31,6 @@ public record RegisterRequest(
     [Required]
     [StringLength(255, MinimumLength = 3)]
     string FullName,
-
-    [Required]
-    [StringLength(255)]
-    [EmailAddress]
-    string Email,
-
-    [Required]
-    [StringLength(255, MinimumLength = 3)]
-    [StartsWith(["09", "63", "9"])]
-    string MobileNum,
 
     [Required]
     [Range(1, int.MaxValue, ErrorMessage = "Value cannot be zero")]

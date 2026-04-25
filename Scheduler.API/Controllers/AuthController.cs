@@ -12,6 +12,9 @@ public class AuthController(AuthServiceHandler service) : ControllerBase
     public async Task<IActionResult> Register([FromBody] RegisterRequest data)
     {
         var res = await service.Register(data);
+        if (!res.IsSucces)
+            return StatusCode(res.ErrorCode, res);
+
         return Ok(res);
     }
 

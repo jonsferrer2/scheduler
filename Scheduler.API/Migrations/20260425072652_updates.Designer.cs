@@ -12,8 +12,8 @@ using Scheduler.API.Data;
 namespace Scheduler.API.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260418153205_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20260425072652_updates")]
+    partial class updates
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -55,7 +55,6 @@ namespace Scheduler.API.Migrations
                         .HasColumnName("fullname");
 
                     b.Property<string>("MobileNum")
-                        .IsRequired()
                         .HasMaxLength(30)
                         .HasColumnType("varchar(30)")
                         .HasColumnName("mobile_num");
@@ -70,12 +69,6 @@ namespace Scheduler.API.Migrations
                         .HasColumnType("int")
                         .HasColumnName("role_id");
 
-                    b.Property<string>("Username")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("varchar(100)")
-                        .HasColumnName("username");
-
                     b.HasKey("Id");
 
                     b.HasIndex("Email")
@@ -86,27 +79,7 @@ namespace Scheduler.API.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.HasIndex("Username")
-                        .IsUnique();
-
                     b.ToTable("admin_users", (string)null);
-                });
-
-            modelBuilder.Entity("Scheduler.API.Models.AdminUserBranch", b =>
-                {
-                    b.Property<int>("AdminUserId")
-                        .HasColumnType("int")
-                        .HasColumnName("admin_user_id");
-
-                    b.Property<int>("BranchId")
-                        .HasColumnType("int")
-                        .HasColumnName("branch_id");
-
-                    b.HasKey("AdminUserId", "BranchId");
-
-                    b.HasIndex("BranchId");
-
-                    b.ToTable("admin_user_branches", (string)null);
                 });
 
             modelBuilder.Entity("Scheduler.API.Models.Branch", b =>
@@ -180,30 +153,6 @@ namespace Scheduler.API.Migrations
                         .IsRequired();
 
                     b.Navigation("Role");
-                });
-
-            modelBuilder.Entity("Scheduler.API.Models.AdminUserBranch", b =>
-                {
-                    b.HasOne("Scheduler.API.Models.AdminUser", "AdminUser")
-                        .WithMany("AdminUserBranches")
-                        .HasForeignKey("AdminUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Scheduler.API.Models.Branch", "Branch")
-                        .WithMany()
-                        .HasForeignKey("BranchId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("AdminUser");
-
-                    b.Navigation("Branch");
-                });
-
-            modelBuilder.Entity("Scheduler.API.Models.AdminUser", b =>
-                {
-                    b.Navigation("AdminUserBranches");
                 });
 #pragma warning restore 612, 618
         }
