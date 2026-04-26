@@ -5,9 +5,12 @@ namespace Scheduler.API.DTOs;
 
 public record LoginRequest(
     [Required]
-    string Username,
+    [EmailAddress]
+    [StringLength(255, MinimumLength = 3)]
+    string Email,
 
     [Required]
+    [StringLength(255, MinimumLength = 3)]
     string Password
 );
 
