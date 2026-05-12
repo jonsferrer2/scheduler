@@ -1,9 +1,11 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Scheduler.API.DTOs;
 using Scheduler.API.Services;
 
 namespace Scheduler.API.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("api/[controller]")]
 public class BranchController(BranchServiceHandler service) : ControllerBase

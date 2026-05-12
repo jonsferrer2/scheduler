@@ -101,11 +101,10 @@ public class AuthServiceHandler(AppDbContext db, ILogger<AuthServiceHandler> log
         var result = new Result<LoginResponse>();
         try
         {
-
             var email = loginData.Email.ToLower();
             var user = await db.AdminUsers
                 .Include(u => u.Role)
-                .FirstOrDefaultAsync();
+                .FirstOrDefaultAsync(u => u.Email == email);
 
             if (user == null)
             {
@@ -113,8 +112,6 @@ public class AuthServiceHandler(AppDbContext db, ILogger<AuthServiceHandler> log
                 result.Message = "Invalid email or password !";
                 return result;
             }
-
-            logger.LogInformation("{@user}", user);
 
             if (!BCrypt.Net.BCrypt.Verify(loginData.Password, user.PasswordHash))
             {
